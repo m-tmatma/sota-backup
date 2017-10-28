@@ -1,0 +1,10 @@
+/src/*.exe
+/src/*.ilk
+/src/*.pdb
+/src/Release_English
+/src/Release
+/src/.vs
+/src/Debug
+/src/Debug_English
+/src/htmlhelp/*.CHM
+/src/htmlhelp/Backup.LOG
