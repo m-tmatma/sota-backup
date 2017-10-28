@@ -69,8 +69,11 @@
 #define LOG_NEW                         1008
 #define MISC_COMMENT_NO                 1009
 #define IDC_RADIO2                      1010
+#define MISC_SLEEP_SUPPRESS_NO          1010
 #define TRANS_DEL                       1011
+#define MISC_SLEEP_SUPPRESS_ALWAYS      1011
 #define TRANS_RMFILE                    1012
+#define MISC_SLEEP_SUPPRESS_AC          1012
 #define LOG_APPEND                      1013
 #define MISC_COMMENT_TIP                1014
 #define IDC_RADIO3                      1015
@@ -350,9 +353,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        153
+#define _APS_NEXT_RESOURCE_VALUE        154
 #define _APS_NEXT_COMMAND_VALUE         40021
-#define _APS_NEXT_CONTROL_VALUE         1247
+#define _APS_NEXT_CONTROL_VALUE         1249
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

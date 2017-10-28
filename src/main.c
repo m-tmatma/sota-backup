@@ -108,6 +108,7 @@ SIZE NotifyDlgSize = {-1, -1 };
 int ExitOnEsc = 0;
 int ShowComment = 1;        /* 0=表示しない,1=ツールチップで表示、2=ウインドウで表示 */
 int AuthDialog = AUTH_DIALOG_HIDE;
+int SleepSuppress = SLEEP_SUPPRESS_AC;
 _TCHAR LastWroteLogFname[MY_MAX_PATH+10+1] = { _T("") };
 _TCHAR LastErrorLogFname[MY_MAX_PATH+1] = { _T("") };
 

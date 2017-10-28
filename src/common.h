@@ -136,6 +136,12 @@
 #define AUTH_DIALOG_HIDE          0       /* 認証ダイアログを表示しない */
 #define AUTH_DIALOG_SHOW          1       /* 認証ダイアログを表示する   */
 
+/*===== スリープを抑止するか  =====*/
+
+#define SLEEP_SUPPRESS_NO       0       /* スリープを抑止しない                       */
+#define SLEEP_SUPPRESS_ALWAYS   1       /* 常にスリープを抑止する                     */
+#define SLEEP_SUPPRESS_AC       2       /* ACに接続されているときスリープを抑止する   */
+
 /*===== TreeViewのデータタイプ =====*/
 
 #define TREE_FOLDER     0

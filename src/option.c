@@ -67,6 +67,7 @@ extern int RegType;
 extern int ExitOnEsc;
 extern int ShowComment;     /* 0=表示しない,1=ツールチップで表示、2=ウインドウで表示 */
 extern int AuthDialog;
+extern int SleepSuppress;
 
 
 /*----- オプション設定 --------------------------------------------------------
@@ -302,7 +303,12 @@ static LRESULT CALLBACK MiscSettingProc(HWND hDlg, UINT message, WPARAM wParam, 
         { MISC_COMMENT_TIP, 1 },
         { MISC_COMMENT_WIN, 2 }
     };
-    #define SHOWCOMMENTBUTTONS  (sizeof(ShowCommentButton)/sizeof(RADIOBUTTON))
+    static const RADIOBUTTON SleepSuppressButton[] = {
+        { MISC_SLEEP_SUPPRESS_NO, SLEEP_SUPPRESS_NO },
+        { MISC_SLEEP_SUPPRESS_ALWAYS, SLEEP_SUPPRESS_ALWAYS },
+        { MISC_SLEEP_SUPPRESS_AC, SLEEP_SUPPRESS_AC }
+    };
+    #define ARRAY_COUNT(arrayname)  (sizeof(arrayname)/sizeof(arrayname[0]))
 
     switch (message)
     {
@@ -311,8 +317,9 @@ static LRESULT CALLBACK MiscSettingProc(HWND hDlg, UINT message, WPARAM wParam, 
             SendDlgItemMessage(hDlg, MISC_TRAYICON, BM_SETCHECK, TrayIcon, 0);
             SendDlgItemMessage(hDlg, MISC_REGTYPE, BM_SETCHECK, RegType, 0);
             SendDlgItemMessage(hDlg, MISC_ESC_EXIT, BM_SETCHECK, ExitOnEsc, 0);
-            SetRadioButtonByValue(hDlg, ShowComment, ShowCommentButton, SHOWCOMMENTBUTTONS);
+            SetRadioButtonByValue(hDlg, ShowComment, ShowCommentButton, ARRAY_COUNT(ShowCommentButton));
             SendDlgItemMessage(hDlg, MISC_AUTHDIAG, BM_SETCHECK, AuthDialog, 0);
+            SetRadioButtonByValue(hDlg, SleepSuppress, SleepSuppressButton, ARRAY_COUNT(SleepSuppressButton));
             return(TRUE);
 
         case WM_NOTIFY:
@@ -324,8 +331,9 @@ static LRESULT CALLBACK MiscSettingProc(HWND hDlg, UINT message, WPARAM wParam, 
                     TrayIcon = SendDlgItemMessage(hDlg, MISC_TRAYICON, BM_GETCHECK, 0, 0);
                     RegType = SendDlgItemMessage(hDlg, MISC_REGTYPE, BM_GETCHECK, 0, 0);
                     ExitOnEsc = SendDlgItemMessage(hDlg, MISC_ESC_EXIT, BM_GETCHECK, 0, 0);
-                    ShowComment = AskRadioButtonValue(hDlg, ShowCommentButton, SHOWCOMMENTBUTTONS);
+                    ShowComment = AskRadioButtonValue(hDlg, ShowCommentButton, ARRAY_COUNT(ShowCommentButton));
                     AuthDialog = SendDlgItemMessage(hDlg, MISC_AUTHDIAG, BM_GETCHECK, 0, 0);
+                    SleepSuppress = AskRadioButtonValue(hDlg, SleepSuppressButton, ARRAY_COUNT(SleepSuppressButton));
                     Apply = YES;
                     break;
 

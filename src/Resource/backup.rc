@@ -309,6 +309,10 @@ BEGIN
     CONTROL         "ウインドウ表示(&W)",MISC_COMMENT_WIN,"Button",BS_AUTORADIOBUTTON,133,63,68,10
     CONTROL         "設定をレジストリではなくINIファイルに保存する(&I)",MISC_REGTYPE,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,85,157,10
     CONTROL         "ネットワークパスで認証ダイアログを表示する(&A)",MISC_AUTHDIAG,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,112,157,10
+    GROUPBOX        "バックアップ中のスリープの抑止",-1,5,135,213,29
+    CONTROL         "しない",MISC_SLEEP_SUPPRESS_NO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,9,147,57,10
+    CONTROL         "常にする",MISC_SLEEP_SUPPRESS_ALWAYS,"Button",BS_AUTORADIOBUTTON,72,147,39,10
+    CONTROL         "AC接続時のみ",MISC_SLEEP_SUPPRESS_AC,"Button",BS_AUTORADIOBUTTON,119,147,92,10
 END
 
 reginit_dlg DIALOG 0, 0, 155, 91
@@ -1094,6 +1098,11 @@ IDR_RT_MANIFEST1        RT_MANIFEST             "backup.exe.manifest"
 //
 
 about_dlg AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+opt_misc_dlg AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

@@ -81,6 +81,7 @@ extern SIZE NotifyDlgSize;
 extern int ExitOnEsc;
 extern int ShowComment;     /* 0=表示しない,1=ツールチップで表示、2=ウインドウで表示 */
 extern int AuthDialog;
+extern int SleepSuppress;
 extern _TCHAR LastWroteLogFname[MY_MAX_PATH+10+1];
 extern _TCHAR LastErrorLogFname[MY_MAX_PATH+1];
 
@@ -128,6 +129,7 @@ int SaveRegistory(void)
             WriteIntValueToReg(hKey4, _T("ExitEsc"), ExitOnEsc);
             WriteIntValueToReg(hKey4, _T("ShowComment"), ShowComment);
             WriteIntValueToReg(hKey4, _T("AuthDialog"), AuthDialog);
+            WriteIntValueToReg(hKey4, _T("SleepSuppress"), SleepSuppress);
 
             WriteBinaryToReg(hKey4, _T("MainSize"), &MainDlgSize, sizeof(SIZE));
             WriteBinaryToReg(hKey4, _T("TransSize"), &TransDlgSize, sizeof(SIZE));
@@ -278,6 +280,7 @@ int LoadRegistory(void)
             ReadIntValueFromReg(hKey4, _T("ExitEsc"), &ExitOnEsc);
             ReadIntValueFromReg(hKey4, _T("ShowComment"), &ShowComment);
             ReadIntValueFromReg(hKey4, _T("AuthDialog"), &AuthDialog);
+            ReadIntValueFromReg(hKey4, _T("SleepSuppress"), &SleepSuppress);
 
             ReadBinaryFromReg(hKey4, _T("MainSize"), &MainDlgSize, sizeof(SIZE));
             ReadBinaryFromReg(hKey4, _T("TransSize"), &TransDlgSize, sizeof(SIZE));

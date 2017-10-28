@@ -344,6 +344,10 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,85,213,10
     CONTROL         "Show Authentication Dialog for UNC Paths",MISC_AUTHDIAG,
                     "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,112,157,10
+    GROUPBOX        "Suppress sleep during backup",-1,5,135,213,29
+    CONTROL         "None",MISC_SLEEP_SUPPRESS_NO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,9,147,57,10
+    CONTROL         "Always",MISC_SLEEP_SUPPRESS_ALWAYS,"Button",BS_AUTORADIOBUTTON,72,147,39,10
+    CONTROL         "Only connected to AC",MISC_SLEEP_SUPPRESS_AC,"Button",BS_AUTORADIOBUTTON,119,147,92,10
 END
 
 reginit_dlg DIALOG 0, 0, 155, 87
@@ -1111,6 +1115,11 @@ list_bmp                BITMAP                  "bitmap1.bmp"
 //
 
 about_dlg AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+opt_misc_dlg AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

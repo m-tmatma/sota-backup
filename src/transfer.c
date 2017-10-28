@@ -146,6 +146,7 @@ int NormalizationType;
 /*===== グローバルなワーク ======*/
 
 extern int LogVerbose;
+extern int SleepSuppress;
 
 
 
@@ -278,6 +279,42 @@ static void BackupThread(void *Dummy)
     _endthread();
 }
 
+/*----- スリープを抑止するか判断する処理  -------------------------------------
+*
+*   Parameter
+*       なし
+*
+*   Return Value
+*       BOOL ステータス
+*           TRUE/FALSE
+*----------------------------------------------------------------------------*/
+static BOOL CheckSuppressSleep()
+{
+    const BOOL DefaultSuppress = FALSE;
+    switch (SleepSuppress)
+    {
+        case SLEEP_SUPPRESS_NO:
+            return FALSE;
+        case SLEEP_SUPPRESS_ALWAYS:
+            return TRUE;
+        case SLEEP_SUPPRESS_AC:
+        {
+            SYSTEM_POWER_STATUS SystemPowerStatus;
+            if (GetSystemPowerStatus(&SystemPowerStatus))
+            {
+                switch (SystemPowerStatus.ACLineStatus)
+                {
+                case 0: /* ACLineStatus: Offline */
+                    return FALSE;
+                case 1: /* ACLineStatus: Online */
+                    return TRUE;
+                }
+            }
+        }
+        break;
+    }
+    return DefaultSuppress;
+}
 
 /*----- バックアップ処理 ------------------------------------------------------
 *
@@ -296,6 +333,13 @@ static int BackupProc(COPYPATLIST *Pat)
     UINT DestDriveType;
     PROC_OPTIONS    options;
 //  _TCHAR *DestPath;
+
+    BOOL IsSuppressSleep = CheckSuppressSleep();
+
+    if (IsSuppressSleep)
+    {
+        SetThreadExecutionState(ES_SYSTEM_REQUIRED | ES_CONTINUOUS);
+    }
 
     Sts = SUCCESS;
     while((Pat != NULL) && (Sts == SUCCESS))
@@ -474,6 +518,11 @@ static int BackupProc(COPYPATLIST *Pat)
 //      free(DestPath);
 
         Pat = Pat->Next;
+    }
+
+    if (IsSuppressSleep)
+    {
+        SetThreadExecutionState(ES_CONTINUOUS);
     }
     return(Sts);
 }
