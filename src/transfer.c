@@ -80,6 +80,7 @@ typedef struct {
 /*===== プロトタイプ =====*/
 
 static void BackupThread(void *Dummy);
+static void SuppressSleepThread(void *Dummy);
 static int BackupProc(COPYPATLIST *Pat);
 static int RemoveDisappearedDir(LPTSTR SrcPath, LPTSTR DstPath, PROC_OPTIONS *options);
 static int RemoveDisappearedDirOne(LPTSTR SrcPath, LPTSTR DstPath, LPTSTR DstSub, PROC_OPTIONS *options, int *DialogResult);
@@ -164,6 +165,7 @@ int MakeBackupThread(void)
     hRunMutex = CreateMutex( NULL, TRUE, NULL );
     CopyPatList = NULL;
     _beginthread(BackupThread, 0, NULL);
+    _beginthread(SuppressSleepThread, 0, NULL);
 
     return(SUCCESS);
 }
@@ -316,6 +318,35 @@ static BOOL CheckSuppressSleep()
     return DefaultSuppress;
 }
 
+/*----- スリープを阻止するスレッドのメインループ ------------------------------------
+*
+*   Parameter
+*       void *Dummy : 使わない
+*
+*   Return Value
+*       なし
+*----------------------------------------------------------------------------*/
+
+static void SuppressSleepThread(void *Dummy)
+{
+    /* 
+        ウェイト時間を 30 秒にしているのはスリープに入るまでの時間の最短が1分なので
+        それより短い間隔で SetThreadExecutionState() を呼び出せるようにするため
+    */
+    while(WaitForSingleObject(hRunMutex, 30 * 1000) == WAIT_TIMEOUT)
+    {
+        if (CopyPatList != NULL)
+        {
+            BOOL IsSuppressSleep = CheckSuppressSleep();
+            if (IsSuppressSleep)
+            {
+                SetThreadExecutionState(ES_SYSTEM_REQUIRED);
+            }
+        }
+    }
+    _endthread();
+}
+
 /*----- バックアップ処理 ------------------------------------------------------
 *
 *   Parameter
@@ -333,13 +364,6 @@ static int BackupProc(COPYPATLIST *Pat)
     UINT DestDriveType;
     PROC_OPTIONS    options;
 //  _TCHAR *DestPath;
-
-    BOOL IsSuppressSleep = CheckSuppressSleep();
-
-    if (IsSuppressSleep)
-    {
-        SetThreadExecutionState(ES_SYSTEM_REQUIRED | ES_CONTINUOUS);
-    }
 
     Sts = SUCCESS;
     while((Pat != NULL) && (Sts == SUCCESS))
@@ -518,11 +542,6 @@ static int BackupProc(COPYPATLIST *Pat)
 //      free(DestPath);
 
         Pat = Pat->Next;
-    }
-
-    if (IsSuppressSleep)
-    {
-        SetThreadExecutionState(ES_CONTINUOUS);
     }
     return(Sts);
 }
