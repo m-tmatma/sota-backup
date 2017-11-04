@@ -56,6 +56,7 @@ static FILE     *LogStrm = NULL;
 static int      DeleteLog = NO;
 static LPTSTR   ErrorLogFname = NULL;
 static FILE     *ErrorStrm = NULL;
+static FILETIME StartTime;
 
 /*===== ŠO•”ŽQÆ =====*/
 
@@ -298,6 +299,8 @@ void WriteTitleToLogfile(LPTSTR Name, LPTSTR SrcPath, LPTSTR DstPath)
 	_stprintf(Tmp, MSGJPN_0, GetTimeString());
     WriteMsgToLogfile(Tmp);
 
+    GetSystemTimeAsFileTime(&StartTime);
+
     while(*SrcPath != NUL)
     {
         _stprintf(Tmp, MSGJPN_1, SrcPath);
@@ -320,9 +323,20 @@ void WriteTitleToLogfile(LPTSTR Name, LPTSTR SrcPath, LPTSTR DstPath)
 void WriteEndTimeToLogfile(void)
 {
     _TCHAR Tmp[256];
+    FILETIME EndTime;
 
     _stprintf(Tmp, MSGJPN_3, GetTimeString());
+    GetSystemTimeAsFileTime(&EndTime);
     WriteMsgToLogfile(Tmp);
+
+    LONGLONG diff = ((LARGE_INTEGER*)&EndTime)->QuadPart - ((LARGE_INTEGER*)&StartTime)->QuadPart;
+    LONGLONG diffInSecond = diff / (10000LL * 1000LL);
+    INT hour   = (INT)(diffInSecond / (60LL * 60LL));
+    INT minute = (INT)((diffInSecond / 60LL) % 60LL);
+    INT second = (INT)(diffInSecond % 60LL);
+    _stprintf(Tmp, MSGJPN_134, hour, minute, second);
+    SetTaskMsg(TASKMSG_NOR, MSGJPN_135, Tmp);
+
     return;
 }
 
