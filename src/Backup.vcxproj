@@ -171,6 +171,7 @@
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="Resource\backup.ico" />
     <None Include="Resource\backup_1.ico" />
     <None Include="Resource\backup_2.ico" />
